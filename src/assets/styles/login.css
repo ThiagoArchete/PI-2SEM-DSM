@@ -13,17 +13,19 @@ body{
 }
 form{
     border-radius: 20px;
-    margin-top: 150px !important;
+    margin-top: 50px !important;
     width: 24% !important;
     background-color: white !important;
     padding: 50px;
+    display: grid;
 }
 
 .btn-primary{
     width: 100%;
     border: none;
     border-radius: 50px;
-    background: linear-gradient(90deg, rgba(33,168,113,1) 10%, rgba(24,214,120,1) 91%);
+    display: flex;
+    justify-content: center;
 }
 
 .form-control{
