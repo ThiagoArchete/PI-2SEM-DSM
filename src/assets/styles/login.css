@@ -46,3 +46,24 @@ form{
         width: 100% !important;
     }
   }
+
+#recuperarSenha {
+    border: none;
+    background-color: inherit;
+}
+
+#recuperarSenha[disabled] {
+    color: red;
+}
+
+.erros {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.mensagemErroSenha {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
