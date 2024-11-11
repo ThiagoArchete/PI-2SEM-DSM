@@ -30,16 +30,44 @@
               <input type="checkbox" class="form-check-input" id="exampleCheck1">
               <label class="form-check-label" for="exampleCheck1">Salvar senha</label>
             </div>
-            <button type="submit" class="btn btn-success" disabled ="true" id="login">Entrar</button>
+            <button type="button" class="btn btn-success" disabled ="true" id="login" onclick="login(event)">Entrar</button>
+            <div>
+            </div>
+            <button  class="btn btn-secondary mt-2" >Registrar</button>
             <div>
               <h1 class="erros"></h1>
             </div>
           </form>
+          
     </div>
 
-    <script src="assets/login.js">
-
-    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth-compat.js"></script>
+    <script type="module">
+      const firebaseConfig = {
+        apiKey: "AIzaSyAmSFTgpEWNizjqKfofQyIqXw52bZB-2ws",
+        authDomain: "pi-2dsm.firebaseapp.com",
+        projectId: "pi-2dsm",
+        storageBucket: "pi-2dsm.firebasestorage.app",
+        messagingSenderId: "356779368872",
+        appId: "1:356779368872:web:24fe0bcd4d5474b4927d9d"
+      };
+      firebase.initializeApp(firebaseConfig);
+      console.log('antes');
+      
+      firebase.auth().signInWithEmailAndPassword('pr243140@gmail.com', '123456').then(response => {
+        console.log('sucess', response);
+        
+      }).catch(error => {
+        console.log('error', error);
+        
+      });
+      console.log('depois');
+      
+      </script>
+      <script src="assets/login.js">
+      </script>
 </body>
 </html>
