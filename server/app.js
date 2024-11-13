@@ -14,6 +14,9 @@ app.set('views', path.join(__dirname, '../views'));
 app.get('/registro', (req, res) => {
     res.render('registro');
 });
+app.get('/login', (req, res) => {
+    res.render('login');
+});
 
 app.post('/registro', (req, res) => {
     const { nome, email, senha, confirmaSenha } = req.body;
