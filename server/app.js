@@ -1,16 +1,37 @@
 const express = require('express');
+const path = require('path');
+const db = require('../api/config/conexao');
 const app = express();
-const mysql = require('mysql2');
-const port = 3000;
+const port = 3001;
 
-const db = mysql.createPool({
-    hostname: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'banco_dados',
-})
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../views'));
+
+app.get('/registro', (req, res) => {
+    res.render('registro');
+});
+
+app.post('/registro', (req, res) => {
+    const { nome, email, senha, confirmaSenha } = req.body;
+
+    if (senha !== confirmaSenha) {
+        return res.status(400).send('As senhas não correspondem');
+    }
+
+    const query = 'INSERT INTO usuarios (nome_completo, email, senha) VALUES (?, ?, ?)';
+    db.query(query, [nome, email, senha], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erro ao registrar o usuário');
+        }
+        res.send('Usuário registrado com sucesso!');
+    });
+});
 
 app.listen(port, () => {
-    console.log('rodando na porta 3000');
-});
+    console.log(`Servidor rodando em http://localhost:${port}`);
+});       
