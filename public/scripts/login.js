@@ -1,36 +1,27 @@
-const entrar = document.getElementById('login');
-function validarCampos() {
-    const email = document.querySelector('#exampleInputEmail1').value;
-    const emailValido = validarEmail();
-    const mensagemErros = document.querySelector('.erros');
-    document.getElementById('recuperarSenha').disabled = !emailValido;
-    const senha = validarSenha();
-    document.getElementById('login').disabled = !senha || !emailValido;
-}
-function emailValido (email) {
-    let emailPattern =  /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-     return emailPattern.test(email); 
-  }
+const form = document.getElementById('forms');
 
-  function validarSenha() {
-    const senha = document.querySelector('#senha').value;
-    if (!senha) {
-        return false;
-    } 
-    return true;
-  }
-
-  function validarEmail() {
-    const email = document.querySelector('#exampleInputEmail1').value;
-    if (!email) {
-        return false;
-    }
-    return emailValido(email)
-}
-entrar.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
     event.preventDefault();
-     window.location.href = '/home';
-})
+    
+    const email = document.getElementById('exampleInputEmail1').value;
+    const senha = document.getElementById('senha').value;
+    
+    const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, senha })
+    });
+    
+    const result = await response.json(); 
+
+    alert(result.message);  
+
+    if (response.ok) { 
+        window.location.href = '/home';  
+    } else {
+        document.querySelector('.erros').textContent = result.message; 
+    } 
+});
 
 
 

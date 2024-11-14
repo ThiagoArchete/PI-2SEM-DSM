@@ -13,24 +13,24 @@
 </head>
 <body class="ubuntu-light">
     <div class="container-fluid">
-        <form class="mx-auto" id="forms" method="POST" action="/login">
+        <form class="mx-auto" id="forms" method="POST" action="/home">
             <h4 class="text-center">Login</h4>
             <div class="mb-3 mt-5">
               <label for="exampleInputEmail1" class="form-label">E-mail</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" name="email" required oninput="validarCampos()">
+              <input type="email" class="form-control" id="exampleInputEmail1" name="email" required>
             </div>
             <div class="mb-3">
               <label for="senha" class="form-label">Senha</label>
-              <input type="password" class="form-control" id="senha" name="senha" required oninput="validarCampos()">
+              <input type="password" class="form-control" id="senha" name="senha" required>
               <div id="emailHelp" class="form-text">
-                <button type="button" id="recuperarSenha" disabled="true">Esqueci a senha</button>
+                <button type="button" id="recuperarSenha">Esqueci a senha</button>
               </div>
             </div>
             <div class="mb-3 form-check">
               <input type="checkbox" class="form-check-input" id="exampleCheck1">
               <label class="form-check-label" for="exampleCheck1">Salvar senha</label>
             </div>
-            <button type="button" class="btn btn-success" disabled="true" id="login">Entrar</button>
+            <button type="submit" class="btn btn-success" id="login">Entrar</button>
             <a href="/registro" class="btn btn-secondary mt-2">Registrar</a>
             <div>
               <h1 class="erros"></h1>
