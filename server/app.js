@@ -25,8 +25,12 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/home', (req,res) => {
-    res.render('home')
-})
+    if (req.session && req.session.usuario) {
+        res.render('home', { usuario: req.session.usuario });
+    } else {
+        res.redirect('/login');
+    }
+}) 
 
 async function validarUsuario(email, senha) {
     const query = 'SELECT * FROM usuarios WHERE email = ?'; 
@@ -52,31 +56,37 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/registro', (req, res) => {
+app.post('/registro', async (req, res) => {
     const { nome, email, senha, confirmaSenha } = req.body;
 
     if (senha !== confirmaSenha) {
-        return res.status(400).send('As senhas não correspondem');
+        return res.status(400).json({ message: 'As senhas não correspondem' });
     }
+ 
+    try {
+        const [result] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email]);
 
-    const query = 'INSERT INTO usuarios (nome_completo, email, senha) VALUES (?, ?, ?)';
-    db.query(query, [nome, email, senha], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('Erro ao registrar o usuário');
+        if (result.length > 0) {
+            return res.status(400).json({ message: 'E-mail já cadastrado' });
         }
-        res.status(200).send('Usuário registrado com sucesso!');
-    }); 
-});
+        const query = 'INSERT INTO usuarios (nome_completo, email, senha) VALUES (?, ?, ?)';
+        await db.query(query, [nome, email, senha]);
 
+        res.status(200).json({ message: 'Usuário registrado com sucesso!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Erro no servidor ao registrar o usuário' });
+    }
+}); 
+ 
 app.get('/home', (req, res) => {
     if (req.session && req.session.usuario) {
         res.render('home', { usuario: req.session.usuario });
     } else {
         res.redirect('/login');
-    } 
+    }  
 }); 
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-});        
+});         

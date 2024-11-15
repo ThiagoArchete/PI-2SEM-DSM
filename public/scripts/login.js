@@ -5,6 +5,7 @@ form.addEventListener('submit', async (event) => {
     
     const email = document.getElementById('exampleInputEmail1').value;
     const senha = document.getElementById('senha').value;
+    const mensagemErro = document.getElementById('erros');
     
     const response = await fetch('/login', {
         method: 'POST',
@@ -14,14 +15,13 @@ form.addEventListener('submit', async (event) => {
     
     const result = await response.json(); 
 
-    alert(result.message);  
-
     if (response.ok) { 
         window.location.href = '/home';  
     } else {
-        document.querySelector('.erros').textContent = result.message; 
+        mensagemErro.textContent = result.message;
+        mensagemErro.style.display = "block";
     } 
-});
+}); 
 
 
 
