@@ -13,7 +13,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
-}));
+})); 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
 
@@ -23,13 +23,16 @@ app.get('/registro', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
-
-app.get('/home', (req,res) => {
+app.get('/taskflow', (req, res) => {
     if (req.session && req.session.usuario) {
-        res.render('home', { usuario: req.session.usuario });
+        res.render('taskflow', { usuario: req.session.usuario });
     } else {
         res.redirect('/login');
     }
+});
+ 
+app.get('/home', (req,res) => {
+    res.render('home');
 }) 
 
 async function validarUsuario(email, senha) {
@@ -51,7 +54,7 @@ app.post('/login', async (req, res) => {
     if (usuarioValido) {
         req.session.usuario = { email };  
         res.status(200).json({ message: 'Login realizado com sucesso' });
-    } else {
+    } else {  
         res.status(401).json({ message: 'Credenciais inválidas' });
     }
 });

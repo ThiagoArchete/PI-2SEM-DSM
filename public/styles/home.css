@@ -23,9 +23,8 @@ nav{
     align-items: center;
     justify-content: space-between;
 }
-
 .logo{
-    width: 140px;
+    width: 100px;
 }
 
 nav ul li{
