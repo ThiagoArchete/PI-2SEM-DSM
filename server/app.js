@@ -25,8 +25,12 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/home', (req,res) => {
-    res.render('home')
-})
+    if (req.session && req.session.usuario) {
+        res.render('home', { usuario: req.session.usuario });
+    } else {
+        res.redirect('/login');
+    }
+}) 
 
 async function validarUsuario(email, senha) {
     const query = 'SELECT * FROM usuarios WHERE email = ?'; 
@@ -85,4 +89,4 @@ app.get('/home', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-});        
+});         
