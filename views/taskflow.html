@@ -13,34 +13,31 @@
     </head>
 <body>
     <div class="sidebar">
-        <h2>TaskFlow</h2>
-        <div class="sidebar-section">
-            <h4>Acessados Recentemente</h4>
-            <a href="#">Item 1</a>
-            <a href="#">Item 2</a>
-            <a href="#">Item 3</a>
-        </div>
+        <img src="../public/logo.svg" class="logo">
         <div class="sidebar-section">
             <h4>Meus Quadros</h4>
-            <a href="#">Novo Quadro +</a>
-            <a href="#">Quadro 1</a>
-            <a href="#">Quadro 2</a>
-        </div>
-        <div class="sidebar-section">
-            <h4>Compartilhados Comigo</h4>
-            <a href="#">Quadro Compartilhado 1</a>
-            <a href="#">Quadro Compartilhado 2</a>
+            <button class="add-board-button">
+                <span>Adicionar novo quadro</span> 
+                <span class="add-icon">+</span>
+            </button>
+            <!-- Novo input para criar o quadro -->
+            <input 
+                type="text" 
+                class="board-name-input" 
+                placeholder="Digite o nome do quadro"
+            />
         </div>
     </div>
 
     <div class="main-content">
         <div class="top-bar">
-            <input type="text" class="search-bar" placeholder="Pesquisar">
+            <div class="selected-board-name"></div>
             <div class="icons">
-                <div class="icon-placeholder"></div> <!-- Placeholder para Notificações -->
-                <div class="icon-placeholder"></div> <!-- Placeholder para Perfil -->
+                <div class="icon-placeholder"></div>
+                <div class="icon-placeholder"></div>
             </div>
         </div>
     </div>
+    <script src="../public/scripts/taskflow.js"></script>
 </body>
 </html>

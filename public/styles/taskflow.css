@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Ubuntu", sans-serif;
 }
 
 body {
@@ -13,20 +13,17 @@ body {
 
 .sidebar {
     width: 280px;
-    background-color: #1b5e20;
-    color: #ffffff;
+    background-color: #14a87c;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 25px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-right: #6e6e6e solid 1px;
 }
 
-.sidebar h2 {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #a5d6a7;
+.logo {
+    width: 40px;
 }
 
 .sidebar-section {
@@ -41,17 +38,42 @@ body {
     color: #c8e6c9;
 }
 
+.add-board-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #15bd88;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.add-board-button .add-icon {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.add-board-button:hover {
+    background-color: #0ba171;
+    transform: scale(1.02);
+}
+
 .sidebar a {
     text-decoration: none;
     color: #ffffff;
     padding: 12px;
     border-radius: 8px;
-    background-color: #2e7d32;
+    background-color: #15bd88;
     transition: background-color 0.3s, transform 0.2s;
 }
 
 .sidebar a:hover {
-    background-color: #388e3c;
+    background-color: #0ba171;
     transform: scale(1.02);
 }
 
@@ -59,7 +81,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
+    background-color: #f3f8f4;
 }
 
 .top-bar {
@@ -67,23 +89,17 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 15px 30px;
-    background-color: #4caf50;
+    background-color: #c9f9ea;
     color: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: #6e6e6e solid 1px;
 }
 
-.search-bar {
-    flex: 1;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 20px;
-    font-size: 14px;
-    outline: none;
-    transition: box-shadow 0.3s;
-}
-
-.search-bar:focus {
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+.selected-board-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+    margin-right: auto;
 }
 
 .icons {
@@ -106,4 +122,21 @@ body {
 
 .icon-placeholder:hover {
     background-color: #81c784;
+}
+
+.board-name-input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 10px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.board-name-input:focus {
+    border-color: #0ba171;
+    box-shadow: 0 0 5px rgba(11, 161, 113, 0.5);
 }
