@@ -140,3 +140,7 @@ body {
     border-color: #0ba171;
     box-shadow: 0 0 5px rgba(11, 161, 113, 0.5);
 }
+
+.hidden {
+    display: none;
+}
