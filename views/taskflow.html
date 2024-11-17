@@ -31,13 +31,13 @@
     <div class="main-content">
         <div class="top-bar">
             <div class="selected-board-name"></div>
-            <button class="add_btn" onclick="openModal(1)">
+            <button class="add_btn" onclick="openModal()">
                 <span>Adicionar tarefa</span> 
             </button>
         </div>
         <div class="container-group">
             <div class="container">
-                <div class="column" id="todoColumn">
+                <div class="column" data-column="1" ondrop="drop_handler(event)" ondragover="dragover_handler(event)">
                     <div class="head">
                         <span>A Fazer</span>
                     </div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="container">
-                <div class="column">
+                <div class="column" data-column="2" ondrop="drop_handler(event)" ondragover="dragover_handler(event)">
                     <div class="head">
                         <span>Em Andamento</span>
                     </div>
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="container">
-                <div class="column">
+                <div class="column" data-column="3" ondrop="drop_handler(event)" ondragover="dragover_handler(event)">
                     <div class="head">
                         <span>Em Atraso</span>
                     </div>
@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="container">
-                <div class="column">
+                <div class="column" data-column="4" ondrop="drop_handler(event)" ondragover="dragover_handler(event)">
                     <div class="head">
                         <span>Concluído</span>
                     </div>
@@ -83,6 +83,7 @@
         <div class="box">
           <div class="head">
             <span id="creationModeTitle">Nova tarefa</span>
+            <span id="editingModeTitle">Editar tarefa</span>
             <button class="material-icons" onclick="closeModal()">
               X
             </button>
@@ -121,9 +122,10 @@
             </div>
     
             <button class="primary" onclick="createTask()" id="creationModeBtn">Cadastrar</button>
+            <button class="primary" onclick="updateTask()" id="editingModeBtn">Salvar alterações</button>
           </div>
         </div>
-    <script src="../public/scripts/moment.min.js"></script>
+    <script src="..//public/scripts/moment.min.js"></script>
     <script src="../public/scripts/taskflow.js"></script>
 </body>
 </html>
