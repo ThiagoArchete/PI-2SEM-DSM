@@ -20,11 +20,10 @@
                 <span>Adicionar novo quadro</span> 
                 <span class="add-icon">+</span>
             </button>
-            <!-- Novo input inicialmente oculto -->
             <input 
                 type="text" 
                 class="board-name-input hidden" 
-                placeholder="Digite o nome do quadro e pressione Enter"
+                placeholder="Digite o nome do quadro"
             />
         </div>
     </div>
@@ -32,12 +31,99 @@
     <div class="main-content">
         <div class="top-bar">
             <div class="selected-board-name"></div>
-            <div class="icons">
-                <div class="icon-placeholder"></div>
-                <div class="icon-placeholder"></div>
+            <button class="add_btn" onclick="openModal(1)">
+                <span>Adicionar tarefa</span> 
+            </button>
+        </div>
+        <div class="container-group">
+            <div class="container">
+                <div class="column" id="todoColumn">
+                    <div class="head">
+                        <span>A Fazer</span>
+                    </div>
+                    <div class="body">
+
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="column">
+                    <div class="head">
+                        <span>Em Andamento</span>
+                    </div>
+                    <div class="body">
+
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="column">
+                    <div class="head">
+                        <span>Em Atraso</span>
+                    </div>
+                    <div class="body">
+
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="column">
+                    <div class="head">
+                        <span>Concluído</span>
+                    </div>
+                    <div class="body">
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <div id="modal">
+        <div class="box">
+          <div class="head">
+            <span id="creationModeTitle">Nova tarefa</span>
+            <button class="material-icons" onclick="closeModal()">
+              X
+            </button>
+          </div>
+    
+          <div class="form">
+            <input type="hidden" id="idInput">
+    
+            <div class="form-group">
+              <label for="description">Descrição</label>
+              <textarea id="description" rows="3"></textarea>
+            </div>
+    
+            <div class="form-group">
+              <label for="priority">Prioridade</label>
+              <select id="priority">
+                <option>Baixa</option>
+                <option>Média</option>
+                <option>Alta</option>
+              </select>
+            </div>
+    
+            <div class="form-group">
+              <label for="column">Coluna</label>
+              <select id="column">
+                <option value="1">A Fazer</option>
+                <option value="2">Em Andamento</option>
+                <option value="3">Em Atraso</option>
+                <option value="4">Concluído</option>
+              </select>
+            </div>
+    
+            <div class="form-group">
+              <label for="">Prazo</label>
+              <input type="date" id="deadline">
+            </div>
+    
+            <button class="primary" onclick="createTask()" id="creationModeBtn">Cadastrar</button>
+          </div>
+        </div>
+    <script src="../public/scripts/moment.min.js"></script>
     <script src="../public/scripts/taskflow.js"></script>
 </body>
 </html>
