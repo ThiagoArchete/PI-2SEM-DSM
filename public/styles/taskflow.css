@@ -351,3 +351,6 @@ button.primary {
           margin-left: auto;
         }
 
+        .hidden {
+          display: none;
+      }

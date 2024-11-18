@@ -5,69 +5,84 @@ document.addEventListener('DOMContentLoaded', () => {
     const addBoardButton = document.querySelector('.add-board-button');
 
     function addBoard(name) {
-        
         const boardContainer = document.createElement('div');
         boardContainer.classList.add('board-container');
-
-        
+    
         const boardContent = document.createElement('div');
         boardContent.classList.add('board-content');
-
+    
         const boardName = document.createElement('span');
-        boardName.textContent = name;
+        boardName.textContent = name; 
         boardName.classList.add('board-name');
         boardContent.appendChild(boardName);
-
+    
         const editInput = document.createElement('input');
         editInput.type = 'text';
         editInput.classList.add('board-name-input', 'hidden');
         boardContent.appendChild(editInput);
-
-        
+    
         const editButton = document.createElement('button');
         editButton.classList.add('edit-button');
         editButton.innerHTML = '✏';
-
+    
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-button');
         deleteButton.innerHTML = '🗑';
-
-        
+        deleteButton.addEventListener('click', () => {
+            deleteBoard(id, boardContainer); r
+          });
+    
         boardContainer.appendChild(boardContent);
         boardContainer.appendChild(editButton);
         boardContainer.appendChild(deleteButton);
         sidebar.appendChild(boardContainer);
-
-        
+        function deleteBoard(boardId, boardElement) {
+            fetch(`taskflow/quadros/${boardId}`, {
+              method: 'DELETE',
+            })
+            .then(response => {
+              if (response.ok) {
+                boardElement.remove();
+              } else {
+                console.error('Erro ao excluir quadro');
+              }
+            })
+            .catch(error => {
+              console.error('Erro na requisição de exclusão:', error);
+            });
+          }
+    
         boardContent.addEventListener('click', () => {
             topBarName.textContent = boardName.textContent;
+            document.querySelector('.main-content').classList.remove('hidden');
         });
-
-        
+    
         editButton.addEventListener('click', () => {
             editInput.value = boardName.textContent;
             boardName.classList.add('hidden');
             editInput.classList.remove('hidden');
             editInput.focus();
         });
-
-        
+    
         editInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 saveEdit();
             }
         });
         editInput.addEventListener('blur', saveEdit);
-
+    
         function saveEdit() {
             const newName = editInput.value.trim();
             if (newName) {
+                if (topBarName.textContent === boardName.textContent || topBarName.textContent === '') {
+                    topBarName.textContent = newName;
+                }
                 boardName.textContent = newName;
             }
             editInput.classList.add('hidden');
             boardName.classList.remove('hidden');
         }
-
+    
         deleteButton.addEventListener('click', () => {
             const confirmDelete = confirm('Tem certeza que deseja excluir este quadro?');
             if (confirmDelete) {
@@ -75,23 +90,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (topBarName.textContent === boardName.textContent) {
                     topBarName.textContent = '';
                 }
+                document.querySelector('.main-content').classList.add('hidden');
+                topBarName.textContent = '';
             }
         });
     }
 
+    async function loadBoards() {
+        try {
+            const response = await fetch('/taskflow/quadros');
+            const boards = await response.json();
 
+            boards.forEach(board => {
+                addBoard(board.nome);
+            });
+        } catch (error) {
+            console.error('Erro ao buscar os quadros:', error);
+        }
+    }
+
+    // Carregar os quadros ao carregar a página
+    loadBoards();
     addBoardButton.addEventListener('click', () => {
         boardInput.classList.remove('hidden');
         boardInput.focus();
     });
 
-    boardInput.addEventListener('keypress', (event) => {
+    boardInput.addEventListener('keypress', async (event) => {
         if (event.key === 'Enter') {
             const boardName = boardInput.value.trim();
             if (boardName) {
-                addBoard(boardName);
-                boardInput.value = '';
-                boardInput.classList.add('hidden');
+                try {
+                    const response = await fetch('/taskflow/quadros', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ nome: boardName }),
+                    });
+    
+                    const result = await response.json();
+                    console.log('Resposta do servidor:', result);  
+    
+                    if (response.ok) {
+                        addBoard(boardName);
+                        boardInput.value = '';
+                        boardInput.classList.add('hidden');
+                    } else {
+                        alert('Erro ao adicionar quadro');
+                    }
+                } catch (error) {
+                    console.error('Erro ao enviar dados para o servidor:', error);
+                    alert('Erro de comunicação com o servidor');
+                }
             }
         }
     });
@@ -196,10 +247,15 @@ function createTask() {
         column: $columnInput.value,
     }
 
-    taskList.push(newTask);
+    console.log(newTask);
 
-    closeModal();
-    generateCards();
+    if (newTask.description && newTask.priority && newTask.deadLine && newTask.column) {
+        taskList.push(newTask);
+        closeModal();
+        generateCards();
+    } else {
+        alert("Preencha todos os campos!");
+    }
 }
 
 function updateTask() {
@@ -210,7 +266,7 @@ function updateTask() {
         deadLine: $deadlineInput.value,
         column: $columnInput.value,
     }
-
+    
     const index = taskList.findIndex(function(task){
         return task.id == $idInput.value;
     });
@@ -241,7 +297,6 @@ function changeColumn(task_id, column_id) {
   function dragstart_handler(ev) {
     console.log(ev);
   
-    // Add the target element's id to the data transfer object
     ev.dataTransfer.setData("my_custom_data", ev.target.id);
     ev.dataTransfer.effectAllowed = "move";
   }
@@ -253,7 +308,6 @@ function changeColumn(task_id, column_id) {
   
   function drop_handler(ev) {
     ev.preventDefault();
-    // Get the id of the target and add the moved element to the target's DOM
     const task_id = ev.dataTransfer.getData("my_custom_data");
     const column_id = ev.target.dataset.column;
     
