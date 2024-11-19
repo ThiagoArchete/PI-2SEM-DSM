@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const boardInput = document.querySelector('.board-name-input');
     const addBoardButton = document.querySelector('.add-board-button');
 
-    function addBoard(name) {
+    function addBoard(name, id) {
         const boardContainer = document.createElement('div');
         boardContainer.classList.add('board-container');
     
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteButton.classList.add('delete-button');
         deleteButton.innerHTML = '🗑';
         deleteButton.addEventListener('click', () => {
-            deleteBoard(id, boardContainer); r
+            deleteBoard(id, boardContainer); 
           });
     
         boardContainer.appendChild(boardContent);
@@ -37,20 +37,22 @@ document.addEventListener('DOMContentLoaded', () => {
         boardContainer.appendChild(deleteButton);
         sidebar.appendChild(boardContainer);
         function deleteBoard(boardId, boardElement) {
-            fetch(`taskflow/quadros/${boardId}`, {
-              method: 'DELETE',
+            fetch(`/taskflow/quadros/${boardId}`, {
+                method: 'DELETE',
             })
             .then(response => {
-              if (response.ok) {
-                boardElement.remove();
-              } else {
-                console.error('Erro ao excluir quadro');
-              }
+                if (response.ok) {
+                    boardElement.remove();
+                    alert('Quadro excluído com sucesso!');
+                } else {
+                    alert('Erro ao excluir o quadro.');
+                }
             })
             .catch(error => {
-              console.error('Erro na requisição de exclusão:', error);
+                console.error('Erro na requisição de exclusão:', error);
+                alert('Erro ao se comunicar com o servidor.');
             });
-          }
+        }
     
         boardContent.addEventListener('click', () => {
             topBarName.textContent = boardName.textContent;
@@ -102,14 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const boards = await response.json();
 
             boards.forEach(board => {
-                addBoard(board.nome);
+                addBoard(board.nome, board.id_quadro);
             });
         } catch (error) {
             console.error('Erro ao buscar os quadros:', error);
         }
     }
-
-    // Carregar os quadros ao carregar a página
+ 
     loadBoards();
     addBoardButton.addEventListener('click', () => {
         boardInput.classList.remove('hidden');

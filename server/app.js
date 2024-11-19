@@ -131,6 +131,8 @@ app.post('/taskflow/quadros', async (req, res) => {
     }
 });
 
+
+
 app.get('/home', (req, res) => {
     if (req.session && req.session.usuario) {
         res.render('home', { usuario: req.session.usuario });
@@ -139,24 +141,28 @@ app.get('/home', (req, res) => {
     }  
 }); 
 
-app.delete('taskflow/quadros/:id', (req, res) => {
-    const boardId = req.params.quadros.id; 
-  
-    const query = 'DELETE FROM quadros WHERE id_quadro = ?';
-  
-    db.query(query, [boardId], (err, results) => {
-      if (err) {
+app.delete('/taskflow/quadros/:id', async (req, res) => {
+    const boardId = req.params.id; 
+    const usuario = req.session.usuario;
+
+    if (!usuario) {
+        return res.status(401).json({ message: 'Usuário não autenticado' });
+    }
+
+    try {
+        const query = 'DELETE FROM quadros WHERE id_quadro = ? AND id_usuario = ?';
+        const [result] = await db.query(query, [boardId, usuario.id_usuario]);
+
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'Quadro excluído com sucesso' });
+        } else {
+            res.status(404).json({ message: 'Quadro não encontrado ou não pertence a este usuário' });
+        }
+    } catch (err) {
         console.error('Erro ao excluir quadro:', err);
-        return res.status(500).send('Erro ao excluir quadro');
-      }
-  
-      if (results.affectedRows === 0) {
-        return res.status(404).send('Quadro não encontrado');
-      }
-  
-      res.status(200).send('Quadro excluído com sucesso');
-    });
-  });
+        res.status(500).json({ message: 'Erro ao excluir quadro' });
+    }
+});
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });         
