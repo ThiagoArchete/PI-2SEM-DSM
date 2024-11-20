@@ -24,7 +24,15 @@ A aplicação foi projetada utilizando as seguintes principais tecnologias:
 
 ## Aparência do Projeto:
 
-<img src="/src/images/image1.png">
+<img src="src/assets/images/image1.png">
+<img src="src/assets/images/image2.png">
+<img src="src/assets/images/image3.png">
+<img src="src/assets/images/image4.png">
+<img src="src/assets/images/image5.png">
+<img src="src/assets/images/image6.png">
+<img src="src/assets/images/image7.png">
+<img src="src/assets/images/image8.png">
+
 
 
 
