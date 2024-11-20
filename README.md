@@ -33,7 +33,7 @@ A aplicação foi projetada utilizando as seguintes principais tecnologias:
 ## Instalação do Projeto:
 
 * Clone os arquivos deste repositório na sua máquina e coloque em uma pasta;
-* Execute o código do Banco de Dados (taskflow.sql) em um SGBD (Preferencialmente o MySQL) online ou local;
+* Execute o código do Banco de Dados (taskflow.sql) que está localizado na pasta "Banco de Dados" no repositório, em um SGBD (Preferencialmente o MySQL) online ou local;
 * Certifique-se de estar com acesso a internet;
 * Deixe o JavaScript de seu navegador ativado;
 * Certifique-se de trocar a "password" no arquivo "conexao.js" para condizer com sua senha do aplicativo MySQL;
