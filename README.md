@@ -37,6 +37,7 @@ A aplicação foi projetada utilizando as seguintes principais tecnologias:
 * Certifique-se de estar com acesso a internet;
 * Deixe o JavaScript de seu navegador ativado;
 * Certifique-se de trocar a "password" no arquivo "conexao.js" para condizer com sua senha do aplicativo MySQL;
+* Execute no terminal do repositório o comando "npm install" para instalar a pasta "node_modules";
 * Execute no terminal do repositório o comando "npm run devStart";
 * Abra o navegador e insira a URL "http://localhost:3001/home" para verificar se o site está rodando na máquina;
 
