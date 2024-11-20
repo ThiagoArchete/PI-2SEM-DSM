@@ -15,7 +15,7 @@ A aplicação foi projetada utilizando as seguintes principais tecnologias:
 * NodeJs para realizar o Back-end com conexão ao banco de dados;
 * MySQL como SGBD para criação e gerenciamento do Banco de Dados.
 
-## [Documentação do Projeto](https://github.com/ThiagoArchete/PI-2SEM-DSM/blob/1df7bd861ccd0113ae435bef340ec618e96b99bf/documenta%C3%A7%C3%A3o/Documenta%C3%A7%C3%A3o%20PI%202SEM%20DSM.doc)
+## [Documentação do Projeto](https://github.com/ThiagoArchete/PI-2SEM-DSM/blob/adf9154d51b74182f583f16615c46114d61d9fdd/documenta%C3%A7%C3%A3o/Documenta%C3%A7%C3%A3o%20PI%202SEM%20DSM.pdf)
 
 ## [Protótipo inicial de baixa fidelidade](https://www.figma.com/design/6iBoxtXF9uAdYtrFlq5sbx/Untitled?node-id=62-11&t=FiCyhJxis3TbbRVv-1)
 
@@ -24,7 +24,7 @@ A aplicação foi projetada utilizando as seguintes principais tecnologias:
 
 ## Aparência do Projeto:
 
-<img src="/public/">
+<img src="/src/images/image1.png">
 
 
 
