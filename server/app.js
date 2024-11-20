@@ -35,14 +35,23 @@ app.get('/registro', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login');
 });
-app.get('/taskflow', (req, res) => {
-    if (req.session && req.session.usuario) {
-        res.render('taskflow', { usuario: req.session.usuario });
-    } else {
-        res.redirect('/login');
+app.get('/taskflow', async (req, res) => {
+    if (!req.session.usuario) {
+        return res.redirect('/login');
     }
-});  
- 
+      
+    try {
+        const [quadros] = await db.query('SELECT * FROM quadros WHERE id_usuario = ?', [req.session.usuario.id_usuario]);
+        const [tarefas] = await db.query('SELECT * FROM tarefas');
+        res.render('taskflow', { quadros, tarefas });
+        console.log(quadros);
+        
+    } catch (err) { 
+        console.error('Erro ao carregar taskflow:', err);
+        res.status(500).send('Erro ao carregar página');
+    }
+}); 
+    
 app.get('/home', (req,res) => {
     res.render('home');
 }) 
@@ -63,6 +72,22 @@ app.get('/taskflow/quadros', async (req, res) => {
     }
 });
 
+app.get('/taskflow/tarefas/:id', async (req, res) => {
+    const boardId = req.params.id;
+    
+    try {
+        const [tasks] = await db.query('SELECT * FROM tarefas WHERE id_quadro = ?', [boardId]);
+
+        if (tasks.length > 0) {
+            res.json(tasks);
+        } else {
+            res.json([]);
+        }
+    } catch (error) {
+        console.error('Erro ao buscar tarefas:', error);
+        res.status(500).json({ message: 'Erro ao buscar tarefas' });
+    }  
+});
 
 app.post('/login', async (req, res) => {
     const { email, senha } = req.body;
@@ -106,32 +131,60 @@ app.post('/taskflow/quadros', async (req, res) => {
     if (!usuario) {
         return res.status(401).json({ message: 'Usuário não autenticado' });
     }
-
+ 
     if (!nome) {
         return res.status(400).json({ message: 'Nome do quadro não fornecido' });
     }
 
     try {
-        const [usuarios] = await db.query('SELECT id_usuario FROM usuarios WHERE email = ?', [usuario.email]);
-        if (usuarios.length === 0) {
-            return res.status(404).json({ message: 'Usuário não encontrado' });
+        const id_usuario = usuario.id_usuario;
+        if (!id_usuario) {
+            return res.status(400).json({ message: 'ID do usuário não encontrado na sessão' });
         }
 
-        const id_usuario = usuarios[0].id_usuario;
         console.log('Usuário logado:', usuario);
         console.log('id_usuario:', id_usuario);
 
-        const query = 'INSERT INTO quadros (nome, id_usuario) VALUES (?, ?)';
-        await db.query(query, [nome, id_usuario]);
+        const [result] = await db.query('INSERT INTO quadros (nome, id_usuario) VALUES (?, ?)', [nome, id_usuario]);
+        const id_quadro = result.insertId; 
 
-        res.status(201).json({ message: 'Quadro criado com sucesso!' });
+        res.status(201).json({
+            success: true,
+            quadro: { id_quadro, nome }
+        });
     } catch (err) {
         console.error('Erro ao adicionar quadro:', err);
         res.status(500).json({ message: 'Erro ao salvar o quadro' });
     }
 });
 
+app.post('/taskflow/tarefas', async (req, res) => {
+    const { descricao, prioridade, prazo, coluna, id_quadro } = req.body;
 
+    if (!descricao || !prioridade || !prazo || !coluna || !id_quadro) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    try {
+        const query = `
+            INSERT INTO tarefas (descricao, prioridade, prazo, coluna, id_quadro)
+            VALUES (?, ?, ?, ?, ?)
+        `;
+        const [result] = await db.query(query, [descricao, prioridade, prazo, coluna, id_quadro]);
+
+        res.status(201).json({
+            id: result.insertId,
+            descricao,
+            prioridade,
+            prazo,
+            coluna,
+            id_quadro
+        });
+    } catch (err) {
+        console.error('Erro ao criar tarefa:', err);
+        res.status(500).json({ message: 'Erro ao salvar a tarefa no banco de dados' });
+    }
+});
 
 app.get('/home', (req, res) => {
     if (req.session && req.session.usuario) {
@@ -142,7 +195,7 @@ app.get('/home', (req, res) => {
 }); 
 
 app.delete('/taskflow/quadros/:id', async (req, res) => {
-    const boardId = req.params.id; 
+    const { id } = req.params;
     const usuario = req.session.usuario;
 
     if (!usuario) {
@@ -150,19 +203,88 @@ app.delete('/taskflow/quadros/:id', async (req, res) => {
     }
 
     try {
-        const query = 'DELETE FROM quadros WHERE id_quadro = ? AND id_usuario = ?';
-        const [result] = await db.query(query, [boardId, usuario.id_usuario]);
-
-        if (result.affectedRows > 0) {
-            res.status(200).json({ message: 'Quadro excluído com sucesso' });
-        } else {
-            res.status(404).json({ message: 'Quadro não encontrado ou não pertence a este usuário' });
-        }
+        await db.query('DELETE FROM quadros WHERE id_quadro = ? AND id_usuario = ?', [id, usuario.id_usuario]);
+        res.status(200).json({ message: 'Quadro excluído com sucesso!' });
     } catch (err) {
         console.error('Erro ao excluir quadro:', err);
         res.status(500).json({ message: 'Erro ao excluir quadro' });
     }
 });
+
+
+app.put('/taskflow/quadros/:id', async (req, res) => {
+    const { id } = req.params;
+    const { nome } = req.body;
+    const usuario = req.session.usuario;
+
+    if (!usuario) {
+        return res.status(401).json({ message: 'Usuário não autenticado' });
+    }
+
+    if (!nome) {
+        return res.status(400).json({ message: 'Nome do quadro não fornecido' });
+    }
+
+    try {
+        await db.query('UPDATE quadros SET nome = ? WHERE id_quadro = ? AND id_usuario = ?', [nome, id, usuario.id_usuario]);
+        res.status(200).json({ message: 'Quadro atualizado com sucesso!' });
+    } catch (err) {
+        console.error('Erro ao editar quadro:', err);
+        res.status(500).json({ message: 'Erro ao editar quadro' });
+    }
+});
+app.put('/taskflow/tarefas/:id', async (req, res) => {
+    const { id } = req.params;
+    const { description, priority, deadLine, column } = req.body;
+
+    if (!description || !priority || !deadLine || !column) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    try {
+        const [result] = await db.query(
+            `UPDATE tarefas 
+             SET descricao = ?, prioridade = ?, prazo = ?, coluna = ? 
+             WHERE id = ?`,
+            [description, priority, deadLine, column, id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Tarefa não encontrada!' });
+        }
+
+        const [updatedTask] = await db.query('SELECT * FROM tarefas WHERE id = ?', [id]);
+        res.status(200).json(updatedTask[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Erro ao atualizar a tarefa.' });
+    }
+});
+
+app.delete('/taskflow/tarefas/:id', async (req, res) => {
+    const { id } = req.params; 
+    const usuario = req.session.usuario; 
+
+    if (!usuario) {
+        return res.status(401).json({ message: 'Usuário não autenticado' });  
+    }
+ 
+    try {
+        const [result] = await db.query('DELETE FROM tarefas WHERE id = ? AND id_quadro IN (SELECT id_quadro FROM quadros WHERE id_usuario = ?)', [id, usuario.id_usuario]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Tarefa não encontrada ou não pertencente ao usuário' });
+        }
+
+        res.status(200).json({ message: 'Tarefa excluída com sucesso!' });
+    } catch (err) {
+        console.error('Erro ao excluir tarefa:', err);
+        res.status(500).json({ message: 'Erro ao excluir tarefa' });
+    }
+});
+
+
+
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
 });         

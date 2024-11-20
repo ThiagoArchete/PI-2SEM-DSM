@@ -354,3 +354,22 @@ button.primary {
         .hidden {
           display: none;
       }
+      .board-item {
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    
+    
+    .board-item.active {
+        border-color: #007bff;
+        background-color: #e9f5ff;
+        font-weight: bold;
+    }
+
+
+    .delete-task-button {
+      margin-top: 8px;
+      padding: 5px;
+      background-color: #1cdba2;
+    }

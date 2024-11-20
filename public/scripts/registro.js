@@ -23,7 +23,7 @@ form.addEventListener('submit', async (event) => {
         });
 
         const result = await response.json();
-
+ 
         if (response.ok) {
             window.location.href = '/login';
         } else {
