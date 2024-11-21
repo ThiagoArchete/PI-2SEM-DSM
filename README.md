@@ -19,7 +19,7 @@ A aplicação foi projetada utilizando as seguintes principais tecnologias:
 
 ## [Protótipo inicial de baixa fidelidade](https://www.figma.com/design/6iBoxtXF9uAdYtrFlq5sbx/Untitled?node-id=62-11&t=FiCyhJxis3TbbRVv-1)
 
-## [Vídeo sobre o projeto]()
+## [Vídeo sobre o projeto](https://youtu.be/uRsRIiItjuI)
 
 
 ## Aparência do Projeto:
